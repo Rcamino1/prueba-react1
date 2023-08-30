@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Buscador from './Buscador'
+import Buscador from './Buscador';
 
 const MiApi = () => {
   const [feriados, setFeriados] = useState([]);
-  const [filteredFeriados, setFilteredFeriados] = useState([])
+  const [filteredFeriados, setFilteredFeriados] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
 
   useEffect(() => {
     fetchData();
@@ -13,19 +18,18 @@ const MiApi = () => {
     const response = await fetch("https://api.victorsanmartin.com/feriados/en.json");
     const jsonData = await response.json();
     setFeriados(jsonData.data);
-    setFilteredFeriados(jsonData.data);
   };
 
-  const handleSearch = (search) => {
-    const filteredResults = feriados.filter((feriado) =>
-      feriado.title.toLowerCase().includes(search.toLowerCase())
-    );
+  useEffect(() => {
+    const filteredResults = feriados.filter((feriado) => {
+      return feriado.title.toLowerCase().includes(search.toLowerCase());
+    });
     setFilteredFeriados(filteredResults);
-  };
+  }, [feriados, search]);
 
   return (
     <div>
-      <Buscador onSearch={handleSearch} />
+      <Buscador onChange={handleChange} search={search} />
       {filteredFeriados.map((feriado, index) => (
         <div key={index}>
           <h2>{feriado.title}</h2>
@@ -35,7 +39,6 @@ const MiApi = () => {
       ))}
     </div>
   );
-
 };
 
 export default MiApi;

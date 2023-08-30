@@ -1,14 +1,14 @@
-const Buscador = ({ onSearch }) => {
-  const handleChange = (e) => {
-    onSearch(e.target.value);
-  };
+const Buscador = ({ onChange, search }) => {
 
   return (
     <div className="search-container">
       <input
-        type="text"
-        placeholder="Busca por Nombre del Feriado"
-        onChange={handleChange}
+        className="form-control my-3"
+        type="search"
+        placeholder="Nombre Feriado"
+        aria-label="Search"
+        value={search}
+        onChange={onChange}
       />
     </div>
   );
